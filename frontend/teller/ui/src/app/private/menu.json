@@ -1,0 +1,89 @@
+{
+    "root": "Teller scenarios",
+    "items": [
+        {
+            "id": "Home",
+            "name": "Home",
+            "alttext": "Home scenario",
+            "link": "home",
+            "items": [
+                {
+                    "id": "Dashboard",
+                    "name": "Dashboard",
+                    "alttext": "Dashboard",
+                    "link": "dashboard"
+                },
+                {
+                    "id": "Mytasks",
+                    "name": "My tasks",
+                    "alttext": "My tasks",
+                    "link": "mytasks"
+                }
+            ]
+        },
+        {
+            "id": "Parties",
+            "name": "Parties",
+            "alttext": "Parties scenario",
+            "link": "parties",
+            "items": [
+                {
+                    "id": "PartyFile",
+                    "name": "Party file",
+                    "alttext": "Party file",
+                    "link": "partyfile"
+                },
+                {
+                    "id": "Onboarding",
+                    "name": "Onboarding",
+                    "alttext": "Onboarding",
+                    "link": "onboarding"
+                },
+                {
+                    "id": "Others",
+                    "name": "Others",
+                    "alttext": "Others",
+                    "link": "others"
+                }
+            ]
+        },
+        {
+            "id": "Enrollment",
+            "name": "Product enrollment",
+            "alttext": "Product enrollment scenario",
+            "link": "enrollment",
+            "items": [
+                {
+                    "id": "Catalog",
+                    "name": "Catalog",
+                    "root": "Catalog",
+                    "link": "catalog"
+                },
+                {
+                    "id": "Savings",
+                    "name": "Savings",
+                    "alttext": "Savings",
+                    "link": "savings"
+                },
+                {
+                    "id": "Financing",
+                    "name": "Financing",
+                    "alttext": "Financing",
+                    "link": "financing"
+                },
+                {
+                    "id": "Investments",
+                    "name": "Investments",
+                    "alttext": "Investments",
+                    "link": "investments"
+                },
+                {
+                    "id": "Others",
+                    "name": "Others",
+                    "alttext": "Others",
+                    "link": "others"
+                }
+            ]
+        }
+    ]
+}

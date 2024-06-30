@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-md py-1 bg-body-tertiary">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">ModernBank</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item" *ngFor="let scenario of scenarios">
+                    <a
+                        [ngClass]="{ 'nav-link':true, 'active': scenario.id === scenarioSelected.id }"
+                        [attr.aria-current]="scenario.id===scenarioSelected.id ? 'page' : 'false'"
+                        [routerLink]="scenario.link"
+                    >{{ scenario.name }}</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Miguel Calvo Orío
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear-wide-connected"></i> Config</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" role="button" (click)="clickSignOut()"><i class="bi bi-box-arrow-left"></i> Sign out</a></li>
+                  </ul>
+            </span>
+          </div>
+    </div>
+</nav>
+<div class="nav-scroller bg-body shadow-sm container-fluid">
+    <nav class="nav nav-underline flex-column flex-sm-row mb-2" aria-label="Secondary navigation">
+        <a *ngFor="let item of scenarioSelected.items"
+            [ngClass]="{ 'ps-0':true, 'pb-0':true, 'pt-1':true, 'nav-link':true, 'active': item.id === itemSelected.id }"
+            [attr.aria-current]="item.id===itemSelected.id ? 'page' : 'false'"
+            [routerLink]="scenarioSelected.link + '/' + item.link"
+        >{{ item.name }}</a>
+    </nav>
+</div>
