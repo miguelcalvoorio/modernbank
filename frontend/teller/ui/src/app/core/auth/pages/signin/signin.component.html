@@ -1,0 +1,63 @@
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/private">
+            <img src="assets/images/moderbank-branding.png" alt="Logo" height="30" class="d-inline-block align-text-top" loading="eager">
+        </a>
+    </div>
+</nav>
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">ModernBank access to teller application</h1>
+            <p class="col-lg-10 fs-4">Please sign-in using your credentials to access teller application features. If you do not have an active credentials and think you should, please contact with our technical support.</p>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form [formGroup]="signInForm" (ngSubmit)="submitSignInForm()" class="p-4 p-md-5 border rounded-3 bg-body-tertiary">
+                <div class="form-floating mb-3">
+                    <input formControlName="username" type="email" id="username" placeholder="name@example.com"
+                        [ngClass]="{
+                            'form-control': true,
+                            'is-invalid': username?.touched && username?.invalid
+                        }"
+                    >
+                    <!--input formControlName="username" type="email" id="username" placeholder="name@example.com"
+                        [ngClass]="{
+                            'form-control': true,
+                            'is-invalid': username?.touched && username?.invalid,
+                            'is-valid': username?.touched && username?.valid
+                        }"
+                    -->
+                    <label for="floatingInput">User</label>
+                    <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="invalid-feedback">
+                        <div *ngIf="username?.hasError('required')">Cannot be empty</div>
+                        <div *ngIf="username?.hasError('minlength')">Username must be at least {{this.MIN_USERNAME_LENGHT}} characters long</div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input formControlName="password" type="password" id="password" placeholder="Password"
+                        [ngClass]="{
+                            'form-control': true,
+                            'is-invalid': password?.touched && password?.invalid
+                        }"
+                    >
+                    <label for="floatingPassword">Password</label>
+                    <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="invalid-feedback">
+                        <div *ngIf="password?.hasError('required')">Cannot be empty</div>
+                    </div>
+                </div>
+                <div class="checkbox mb-3">
+                    <label>
+                        <input formControlName="rememberMe" type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <div *ngIf="this.formError.length > 0" class="alert alert-danger d-flex align-items-center mt-3 mb-0" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-3" style="font-size: 1.5rem;"></i>
+                    <div>{{this.formError}}</div>
+                </div>
+                <hr class="my-4">
+                <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
+            </form>
+        </div>
+    </div>
+</div>

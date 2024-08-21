@@ -40,6 +40,12 @@
                     "link": "onboarding"
                 },
                 {
+                    "id": "PartySearch",
+                    "name": "Search",
+                    "alttext": "Search parties",
+                    "link": "search"
+                },
+                {
                     "id": "Others",
                     "name": "Others",
                     "alttext": "Others",

@@ -1,22 +1,26 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { PrivateRoutingModule } from './private-routing.module';
 import { PrivateComponent } from './private.component';
-import { FooterComponent, HeaderComponent } from './widgets';
+import { HeaderComponent, StatusComponent } from './widgets';
+import { PartySelectorComponent } from "./widgets/partyselector/partyselector.component";
+import { GetDescriptionPipe } from '../shared/pipes/getdescription.pipe';
 
 @NgModule({
   declarations: [
     PrivateComponent,
     HeaderComponent,
-    FooterComponent
+    StatusComponent,
+    PartySelectorComponent
   ],
   imports: [
     CommonModule,
-    PrivateRoutingModule
-  ],
+    PrivateRoutingModule,
+    GetDescriptionPipe
+],
   providers: [
-    
+    DatePipe
   ]
 })
 export class PrivateModule {}

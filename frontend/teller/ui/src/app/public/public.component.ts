@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'app-public',
   standalone: false,
   templateUrl: './public.component.html',
-  styleUrl: './public.component.scss'
+  styleUrl: './public.component.scss',
 })
 export class PublicComponent {
 

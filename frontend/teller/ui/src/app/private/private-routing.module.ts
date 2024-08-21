@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PrivateComponent } from './private.component';
 
-import { PageNotFoundComponent } from '../shared/pages/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from '../shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: '', component: PrivateComponent, children: [

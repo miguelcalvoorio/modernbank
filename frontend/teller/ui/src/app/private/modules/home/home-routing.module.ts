@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { MytasksComponent } from './pages/mytasks/mytasks.component';
-import { PageNotFoundComponent } from '../../../shared/pages/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from '../../../shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },

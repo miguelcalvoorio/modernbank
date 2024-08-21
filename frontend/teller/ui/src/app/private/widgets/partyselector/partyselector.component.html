@@ -1,0 +1,89 @@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="d-flex align-items-center flex-shrink-0 p-3 border-bottom">
+    <span class="fs-5 fw-semibold">Parties selector</span>
+    <a routerLink="parties/search" class="link-body-emphasis text-decoration-none ms-auto">
+      <svg class="bi pe-none" width="30" height="24" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#person-fill-add"></use></svg>
+    </a>
+  </div>
+  <div class="list-group list-group-flush border-bottom scrollarea">
+    <ng-template ngFor let-party [ngForOf]="partiesList" let-numItem="index">
+      <a *ngIf="numItem === 0" routerLink="parties/partyfile" [queryParams]="{ id: party.uuid }" class="list-group-item list-group-item-action active py-3 lh-sm" aria-current="true">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1">{{ party.lastName }}, {{ party.name }}</strong>
+        </div>
+        <div class="col-10 mb-1 small">
+          <ng-container [ngTemplateOutlet]="basicDataTemplate" [ngTemplateOutletContext]="{party: party}"/>
+          <small class="text-body-secondary">Identifications:</small>
+          <ng-container *ngFor="let identification of party.identifications" [ngTemplateOutlet]="identificationTemplate" [ngTemplateOutletContext]="{identification: identification}"/>
+          <small class="text-body-secondary">Contacts:</small>
+          <ng-container *ngFor="let contact of party.contacts" [ngTemplateOutlet]="contactTemplate" [ngTemplateOutletContext]="{contact: contact}"/>
+        </div>
+      </a>
+      <div *ngIf="numItem > 0" href="javascript: void(0)" class="list-group-item list-group-item-action py-3 lh-sm">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <strong class="mb-1" (click)="selectParty(party)" style="cursor: pointer;">{{ party.lastName }}, {{ party.name }}</strong>
+          <small class="text-body-secondary" (click)="removeParty(numItem)"><i class="bi bi-x-circle-fill me-2"></i></small>
+        </div>
+        <div class="col-10 mb-1 small">
+          <small class="text-body-secondary">Identifications:</small>
+          <ng-container *ngFor="let identification of party.identifications" [ngTemplateOutlet]="identificationTemplate" [ngTemplateOutletContext]="{identification: identification}"/>
+        </div>
+      </div>
+    </ng-template>
+    <a *ngIf="partiesList.length === 0" routerLink="parties/search" class="list-group-item list-group-item-action py-3 lh-sm">
+      <div class="mb-1 small">There's no parties added to your workspace</div>
+    </a>
+  </div>
+</div>
+
+<ng-template #basicDataTemplate let-party="party">
+  <div>
+    <small class="text-body-secondary">Status: </small>{{ party.status | getdescription: dataStatusDictionary }}
+  </div>
+  <div>
+    <small class="text-body-secondary">Roles: </small>{{ party.roles }}
+  </div>
+  <div>
+    <small class="text-body-secondary">Gender: </small>{{ party.gender | getdescription: dataGenderDictionary }}
+  </div>
+  <div>
+    <small class="text-body-secondary">Date of birth: </small>{{ party.dateOfBirth | date: 'longDate' }} ({{ party.placeOfBirth }})
+  </div>
+  <div>
+    <small class="text-body-secondary">Nationatility: </small>{{ party.nationality | getdescription: dataCountryDictionary }}
+  </div>
+</ng-template>
+
+<ng-template #identificationTemplate let-identification="identification">
+  <span [ngSwitch]="identification.type">
+    <div *ngSwitchCase="'PASSPORT'">
+      <i class="bi bi-passport ms-3 me-2"></i>
+      <small class="text-body-secondary">Passport: </small>
+      {{ identification.documentId }} ({{ identification.issuer | getdescription: dataCountryDictionary }})
+    </div>
+    <div *ngSwitchCase="'NATIONAL_ID'">
+      <i class="bi bi-person-vcard ms-3 me-2"></i>
+      <small class="text-body-secondary">National ID: </small>
+      {{ identification.documentId }} ({{ identification.issuer | getdescription: dataCountryDictionary }})
+    </div>
+    <div *ngSwitchDefault>
+      <i class="bi bi-card-text ms-3 me-2"></i>
+      <small class="text-body-secondary">Other identification document: </small>
+      {{ identification.documentId }} ({{ identification.issuer | getdescription: dataCountryDictionary }})
+    </div>
+  </span>
+</ng-template>
+
+<ng-template #contactTemplate let-contact="contact">
+  <span [ngSwitch]="contact.type">
+    <div *ngSwitchCase="'EMAIL'">
+      <i class="bi bi-envelope ms-3 me-2"></i><small class="text-body-secondary">Email: </small>{{ contact.contact }}
+    </div>
+    <div *ngSwitchCase="'PHONE'">
+      <i class="bi bi-phone ms-3 me-2"></i><small class="text-body-secondary">Phone: </small>{{ contact.contact }}
+    </div>
+    <div *ngSwitchDefault>
+      <i class="bi bi-card-text ms-3 me-2"></i><small class="text-body-secondary">Other: </small>{{ contact.contact }}
+    </div>
+  </span>
+</ng-template>

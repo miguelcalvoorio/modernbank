@@ -1,0 +1,33 @@
+<div class="table-responsive-lg">
+    <table *ngIf="dataGridConfiguration" class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th *ngFor="let columnConfig of dataGridConfiguration.getColumnsConfiguration()">{{ columnConfig.label }}</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            <ng-template ngFor let-data [ngForOf]="dataContainer?.data" let-numItem="index">
+                <tr>
+                    <td *ngFor="let columnConfig of dataGridConfiguration.getColumnsConfiguration(); index as i">
+                        <a *ngIf="i === 0" (click)="showDetail(numItem)" href="javascript: void(0);">
+                            <svg *ngIf="numItem != idItemSelected" class="bi pe-none me-2 text-success" width="16" height="16" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#plus-circle-fill"></use></svg>
+                            <svg *ngIf="numItem === idItemSelected" class="bi pe-none me-2 text-danger" width="16" height="16" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#dash-circle-fill"></use></svg>
+                        </a>
+                        {{ this.formatData(columnConfig, data[columnConfig.field]) }}
+                    </td>
+                </tr>
+                <tr *ngIf="idItemSelected === numItem">
+                    <td colspan="100%">
+                        <ng-container [ngTemplateOutlet]="detailTemplate || defaultTemplate" [ngTemplateOutletContext]="{data: data}"></ng-container>
+                    </td>
+                </tr>
+            </ng-template>
+        </tbody>
+    </table>
+    <p *ngIf="dataContainer">Showing {{ dataContainer.page.page * dataContainer.page.size + 1 }} to {{ dataContainer.page.page * dataContainer.page.size + (dataContainer.data.length) }} of {{ dataContainer.page.total }} entries</p>
+    <p *ngIf="!dataContainer">No entries</p>
+    <widget-pagination *ngIf="dataContainer" [pageObject]="dataContainer.page" (goToPageFunction)="navigateToPage($event)"/>
+</div>
+
+<ng-template #defaultTemplate let-data="data">{{ data | json }}</ng-template>
+

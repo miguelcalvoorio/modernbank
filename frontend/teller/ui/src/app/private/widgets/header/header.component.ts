@@ -1,10 +1,16 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, catchError, of, tap } from 'rxjs';
+
+import { AuthService } from '../../../core/auth/auth.service';
+import { ResponseError } from '../../../core/auth/auth.models';
+import { User } from '../../../core/auth/auth.models';
 
 import { PRIVATE_MODULE_CONFIG } from '../../private.config';
+import { PartySelectorService } from '../partyselector/partyselector.service';
 
 import * as menuConfig from '../../menu.json';
+import { Party } from '../../modules/parties/party.models';
 
 @Component({
   selector: 'widget-header',
@@ -13,20 +19,39 @@ import * as menuConfig from '../../menu.json';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  config = inject(PRIVATE_MODULE_CONFIG);
-  basePath = this.config.privateUrlPath;
+  private partySelectorService: PartySelectorService = inject(PartySelectorService);
+  private router: Router = inject(Router);
+  private authService: AuthService = inject(AuthService);
 
-  currentPath: string = '';
+  private config = inject(PRIVATE_MODULE_CONFIG);
 
-  scenarios: any[] = menuConfig.items;
-  scenarioSelected: any = null;
-  itemSelected: any = null;
+  private basePath = this.config.privateUrlPath;
 
-  urlEventSubscription!: Subscription;
+  public currentPath: string = '';
 
-  constructor(private router: Router) {}
+  public scenarios: any[] = menuConfig.items;
+  public scenarioSelected: any = null;
+  public itemSelected: any = null;
+  public party: Party | undefined;
+
+  private urlEventSubscription!: Subscription;
+
+  public currentUser?: User;
 
   ngOnInit(): void {
+    // Load current user
+    this.authService.getUser()
+      .pipe(
+        catchError((error) => {
+          const signInError = error as ResponseError;
+          console.log("Status: " + signInError.code + " [" + signInError.message + "]")
+          return of();
+        }),
+        tap(data => {
+          this.currentUser = data;
+        })
+      ).subscribe();
+
     // Default scenario and operation
     this.scenarioSelected = this.scenarios[0];
     this.itemSelected = this.scenarioSelected.items[0];
@@ -40,11 +65,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.selectSecenario(e.url);
       }
     });
+
+    // Load party selection
+    this.partySelectorService.partyDataEmmited.subscribe(party => {
+      this.party = party;
+    });
   }
 
   ngOnDestroy(): void {
     // prevent memory leak when component destroyed
-    this.urlEventSubscription.unsubscribe();
+    if (this.urlEventSubscription) {
+      this.urlEventSubscription.unsubscribe();
+    }
   }
 
   selectSecenario(url: string): void {
@@ -73,6 +105,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   clickSignOut(): void {
-    console.log('Sign out');
+    this.authService.signOut();
   }
 }

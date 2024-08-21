@@ -1,6 +1,9 @@
 <nav class="navbar navbar-expand-md py-1 bg-body-tertiary">
     <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">ModernBank</span>
+        <!--span class="navbar-brand mb-0 h1">ModernBank</span-->
+        <a class="navbar-brand" href="/private">
+            <img src="assets/images/moderbank-branding.png" alt="Logo" height="30" class="d-inline-block align-text-top" loading="eager">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -16,12 +19,14 @@
             </ul>
             <span class="navbar-text">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Miguel Calvo Orío
+                    {{ currentUser?.family_name}}, {{ currentUser?.given_name}}
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear-wide-connected"></i> Config</a></li>
+                    <li><a class="dropdown-item disabled" href="#">{{ currentUser?.preferred_username }}</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" role="button" (click)="clickSignOut()"><i class="bi bi-box-arrow-left"></i> Sign out</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear-wide-connected me-2"></i>Config</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" role="button" (click)="clickSignOut()"><i class="bi bi-box-arrow-left me-2"></i>Sign out</a></li>
                   </ul>
             </span>
           </div>
@@ -34,5 +39,13 @@
             [attr.aria-current]="item.id===itemSelected.id ? 'page' : 'false'"
             [routerLink]="scenarioSelected.link + '/' + item.link"
         >{{ item.name }}</a>
+        <div class="ms-auto ps-0 pb-0 pt-1 mb-1">
+            <a href="#" class="link-body-emphasis text-decoration-none ms-auto" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                <span *ngIf="party" class="fw-semibold me-2">{{ party.lastName }}, {{ party.name }}</span>
+                <span *ngIf="!party" class="fw-semibold me-2">- no selected party -</span>
+                <svg class="bi pe-none me-2" width="30" height="24" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#person-circle"></use></svg>
+                <!--svg class="bi pe-none" width="30" height="24" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#person-fill-add"></use></svg-->
+            </a>
+        </div>
     </nav>
 </div>

@@ -1,0 +1,30 @@
+services:
+  party-database:
+    container_name: party-database
+    hostname: party-database
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      ./database-conf/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - party-network
+  party-backend:
+    container_name: party-backend
+    hostname: party-backend-hostname
+    image: localhost/party-backend:latest
+    depends_on:
+      - party-database
+    ports:
+      - "8101:8101"
+    extra_hosts:
+      - "keycloak:${KEY_CLOAK_IP_ADDR}"
+networks:
+  party-network:
+    driver: bridge
+    name: party-network
+    

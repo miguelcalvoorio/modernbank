@@ -1,16 +1,30 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { PartyRoutingModule } from './parties-routing.module';
-import { OnboardingComponent, PartyfileComponent } from './pages';
+import { OnboardingComponent, PartyfileComponent, SearchComponent } from './pages';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PaginationComponent } from "../../../shared/components/pagination/pagination.component";
+import { DatagridComponent } from "../../../shared/components/datagrid/datagrid.component";
+import { GetDescriptionPipe } from '../../../shared/pipes/getdescription.pipe';
 
 @NgModule({
   declarations: [
     PartyfileComponent,
-    OnboardingComponent
+    OnboardingComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,
-    PartyRoutingModule
-  ]
+    ReactiveFormsModule,
+    PartyRoutingModule,
+    NgbDatepickerModule,
+    PaginationComponent,
+    DatagridComponent,
+    GetDescriptionPipe
+],
+providers: [
+  DatePipe
+]
 })
 export class PartiesModule { }

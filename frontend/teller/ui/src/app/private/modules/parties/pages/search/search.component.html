@@ -1,0 +1,225 @@
+<div class="row g-3 mb-3">
+    <div class="col">
+        <h4 class="mb-3">Search parties</h4>
+    </div>
+</div>
+<form [formGroup]="partySearchForm" (ngSubmit)="submitPartySearchForm()" class="needs-validation" novalidate="">
+    <div class="row g-3 mb-3">
+         <div class="col-sm-6 col-xl-4">
+            <label for="firstName" class="form-label">First name</label>
+            <input formControlName="firstName" type="text" id="firstName" placeholder="First name"
+                [ngClass]="{
+                    'form-control': true,
+                    'is-invalid': firstName?.touched && firstName?.invalid
+            }">
+            <div class="invalid-feedback">
+                Max first name length exceeded.
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-4">
+            <label for="lastName" class="form-label">Last name</label>
+            <input formControlName="lastName" type="text" class="form-control" id="lastName" placeholder="Last name"
+                [ngClass]="{
+                    'form-control': true,
+                    'is-invalid': lastName?.touched && lastName?.invalid
+            }">
+            <div class="invalid-feedback">
+                Max last name length exceeded.
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-4">
+            <label for="email" class="form-label">Email</label>
+            <input formControlName="email" type="email" class="form-control" id="email" placeholder="name@example.com"
+                [ngClass]="{
+                    'form-control': true,
+                    'is-invalid': email?.touched && email?.invalid
+            }">
+            <div class="invalid-feedback">
+                Max email length exceeded.
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <label for="documentId" class="form-label">Document Id</label>
+            <input type="text" class="form-control" formControlName="documentId" id="documentId" placeholder="" value="" required="false">
+            <div class="invalid-feedback">
+                Valid document Id is required.
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2">
+            <label for="dateOfBirth" class="form-label">Date of birth</label>
+            <div class="input-group has-validation">
+                <input
+                    formControlName="dateOfBirth"
+                    class="form-control"
+                    placeholder="yyyy-mm-dd"
+                    id="dateOfBirth"
+                    name="dateOfBirth"
+                    ngbDatepicker
+                    #d="ngbDatepicker"
+                    required="false"
+                />
+                <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+                <div class="invalid-feedback">
+                    Not a valid date.
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <label for="nationality" class="form-label">Nationality</label>
+            <div class="input-group">
+                <select class="form-select" formControlName="nationality" id="nationality" aria-label="Default select any" required="false">
+                    <option value="" selected>Any</option>
+                    <option *ngFor="let country of dataCountryDictionary | keyvalue" value="{{ country.key }}">{{ country.value }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <label for="status" class="form-label">Status</label>
+            <div class="input-group">
+                <div class="input-group">
+                    <select class="form-select" formControlName="status" id="status" aria-label="Default select any" required="false">
+                        <option value="" selected>Any</option>
+                        <option *ngFor="let status of dataStatusDictionary | keyvalue" value="{{ status.key }}">{{ status.value }}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-2 mt-auto pt-3">
+            <button class="w-100 btn btn-primary" type="submit">
+                <svg class="bi pe-none me-2" width="16" height="16" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#search"></use></svg>
+                Search
+            </button>
+        </div>
+    </div>
+</form>
+<hr class="my-4">
+
+<widget-datagrid [dataGridConfiguration]="dataGridConfiguration" [dataContainer]="partyContainer" [detailTemplate]="partyDetailTemplate" (goToPageFunction)="requestPage($event)"/>
+
+<ng-template #partyDetailTemplate let-data="data">
+    <ng-container *ngIf="checkPartyType(data) as party">
+        <div class="d-flex gap-2 w-100 justify-content-between mb-2 mt-2">
+            <button class="btn btn-primary" type="button" (click)="addParty(party)">
+                <i class="bi bi-person-fill-add me-2"></i>Add party to session context
+            </button>
+            <div></div>
+        </div>
+        <div class="d-flex flex-column flex-md-row p-4 gap-4 align-items-center justify-content-center align-items-baseline">
+            <div class="list-group col-6">
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Universal Unique Identifier</small>
+                        {{ party.uuid }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Status</small>
+                        {{ party.status | getdescription: dataStatusDictionary }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Roles</small>
+                        {{ party.roles }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">First name</small>
+                        {{ party.name }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Last name</small>
+                        {{ party.lastName }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Gender</small>
+                        {{ party.gender | getdescription: dataGenderDictionary }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Date of birth</small>
+                        {{ party.dateOfBirth | date: 'longDate' }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Place of birth</small>
+                        {{ party.placeOfBirth }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Nationality</small>
+                        {{ party.nationality | getdescription: dataCountryDictionary }}
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Created by</small>
+                        {{ party.createdBy.fullName }} ({{ party.createdBy.timestamp | date: 'long' }})
+                    </span>
+                </label>
+                <label class="list-group-item d-flex gap-2">
+                    <span>
+                        <small class="d-block text-body-secondary">Last updated by</small>
+                        {{ party.lastUpdatedBy.fullName }} ({{ party.lastUpdatedBy.timestamp | date: 'long' }})
+                    </span>
+                </label>
+            </div>
+            <div class="col-6">
+                <div class="list-group pb-3">
+                    <label *ngFor="let identification of party.identifications" class="list-group-item d-flex gap-2">
+                        <span [ngSwitch]="identification.type">
+                            <small class="d-block text-body-secondary">Identification</small>
+                            <div *ngSwitchCase="'PASSPORT'">
+                                <svg class="bi pe-none me-2" width="20" height="20" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#passport"></use></svg>
+                                Passport ({{ identification.issuer | getdescription: dataCountryDictionary }})
+                            </div>
+                            <div *ngSwitchCase="'NATIONAL_ID'">
+                                <svg class="bi pe-none me-2" width="20" height="20" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#person-vcard"></use></svg>
+                                National ID ({{ identification.issuer | getdescription: dataCountryDictionary }})
+                            </div>
+                            <div *ngSwitchDefault>
+                                <svg class="bi pe-none me-2" width="20" height="20" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#card-text"></use></svg>
+                                Other identification document ({{ identification.issuer }})
+                            </div>
+                            Document number {{ identification.documentId }}<br>
+                            Issued on {{ identification.issueDate | date: 'longDate' }}<br>
+                            Expiration on {{ identification.expirationDate | date: 'longDate' }}
+                        </span>
+                    </label>
+                </div>
+                <div class="list-group pb-3">
+                    <label *ngFor="let contact of party.contacts" class="list-group-item d-flex gap-2">
+                        <span [ngSwitch]="contact.type">
+                            <small class="d-block text-body-secondary">Contact</small>
+                            <svg *ngSwitchCase="'EMAIL'" class="bi pe-none me-2" width="20" height="20" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#envelope"></use></svg>
+                            <svg *ngSwitchCase="'PHONE'" class="bi pe-none me-2" width="20" height="20" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#telephone"></use></svg>
+                            <svg *ngSwitchDefault class="bi pe-none me-2" width="20" height="20" fill="currentColor"><use xlink:href="/assets/icons/bootstrap-icons.svg#phone"></use></svg>
+                            {{ contact.contact }}
+                            <i *ngIf="contact.preferred" class="bi bi-bookmark-star"></i>
+                        </span>
+                    </label>
+                </div>
+                <div class="list-group pb-3">
+                    <label *ngFor="let address of party.addresses" class="list-group-item d-flex gap-2">
+                        <span>
+                            <small class="d-block text-body-secondary">Address</small>
+                            {{ address.address }}<br>
+                            {{ address.city }} ({{ address.postalCode }})<br>
+                            {{ address.state }} - {{ address.country | getdescription: dataCountryDictionary }}<br>
+                            {{ address.roles }}
+                        </span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-template>
